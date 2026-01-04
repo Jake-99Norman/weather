@@ -1,3 +1,5 @@
+const skycons = new Skycons({color: "black"})
+
 async function getWeather(city) {
     const apiKey = "6273b4868f1b471db3d222510240306";
     const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
@@ -33,4 +35,25 @@ function displayWeather(weatherData) {
         <p>Temperature:${convert} °F</p>
         <p>Condition: ${weatherData.current.condition.text}</p>
     `;
+
+    const icon = getSkycon(weatherData.current.condition.text)
+    skycons.remove("weatherIcon")
+    skycons.set("weatherIcon", icon)
+    skycons.play()
+}
+
+function getSkycon(conditionText) {
+    const condition = conditionText.toLowerCase();
+
+    if (condition.includes("clear")) return Skycons.CLEAR_DAY;
+    if (condition.includes("sunny")) return Skycons.CLEAR_DAY;
+    if (condition.includes("cloud")) return Skycons.CLOUDY;
+    if (condition.includes("overcast")) return Skycons.CLOUDY;
+    if (condition.includes("rain")) return Skycons.RAIN;
+    if (condition.includes("snow")) return Skycons.SNOW;
+    if (condition.includes("sleet")) return Skycons.SLEET;
+    if (condition.includes("fog") || condition.includes("mist")) return Skycons.FOG;
+    if (condition.includes("thunder")) return Skycons.THUNDER;
+
+    return Skycons.PARTLY_CLOUDY_DAY;
 }

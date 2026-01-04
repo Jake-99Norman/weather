@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
-    <link rel="stylesheet" href="public/weather.css"/>
-</head>
-<body>
-    <h1>Weather App</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name">
-    <button onclick="showWeather()">Get Weather</button>
-    <div id="weatherData"></div>
-</body>
-<script src="public/weather.js"></script>
+    <link rel="stylesheet" href="public/weather.css" />
+  </head>
+  <body>
+    <canvas class="weather-icon" id="weatherIcon" width="500" height="500"></canvas>
+
+    <section>
+    <h1 class="weather-title">Weather App</h1>
+    <input
+      class="city-input"
+      type="text"
+      id="cityInput"
+      placeholder="Enter city name"
+    />
+    <button class="btn" onclick="showWeather()">Search</button>
+    <div class="weather-modal">
+      <div class="weather-data" id="weatherData"></div>
+    </div>
+    </section>
+  </body>
+  <script src="https://darkskyapp.github.io/skycons/skycons.js"></script>
+  <script src="public/weather.js"></script>
 </html>
