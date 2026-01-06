@@ -3,44 +3,45 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background-color: #758695;
   margin: 0;
   min-height: 100vh;
 }
 section {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .weather-title {
+  position: relative;
   display: flex;
   justify-content: center;
   background-color: #f1ecda;
   margin: 0;
-  margin-bottom: 0.7rem;
+  margin-bottom: 1.7rem;
   padding: 0.3rem;
   width: 100%;
   color: #200;
 }
 
-.weather-icon{
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    opacity: 0.25;
-    pointer-events: none;
+.weather-icon {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .city-input {
   padding: 0.5rem 0.5rem;
-  width: 50vw;
+  width: 20vw;
   border-radius: 0.5rem;
   font-size: large;
 }
@@ -51,38 +52,58 @@ section {
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  width: 50vw;
+  width: 20vw;
 }
 
 .btn:hover {
   background-color: hsl(200, 70%, 40%);
 }
 
-.weather-title, .city-input, .btn{
-    position: relative;
-    z-index: 2;
+.weather-title,
+.city-input,
+.btn {
+  position: relative;
+  z-index: 2;
 }
 
-.weather-modal{
-    background-color: white;
-    margin: 5rem;
-    height: 50vh;
-    width: 50vw;
-    max-width: 400px;
-    border-radius: .3em;
-    
+.weather-modal {
+  background-color: white;
+  margin: 5rem;
+  height: 60vh;
+  width: 60vw;
+  max-width: 400px;
+  border-radius: 0.3em;
+
+  transform: scale(0);
+  opacity: 0;
+  transform-origin: top center;
+  pointer-events: none;
 }
 
-.weather-data{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.weather-modal.show{
+    animation: modalIn 0.35s ease-out forwards;
+    pointer-events: auto;
 }
 
-
+.weather-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 #search-results {
   margin-top: 20px;
 }
 
 
+@keyframes modalIn {
+    0% {
+        transform: scale(0); 
+        opacity: 0;;
+    }
+
+    100% {
+        transform: scale(1);
+         opacity: 1;;
+    }
+}

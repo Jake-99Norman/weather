@@ -27,6 +27,11 @@ async function showWeather() {
 }
 
 function displayWeather(weatherData) {
+    const modal = document.querySelector(".weather-modal")
+
+    modal.classList.remove("hide")
+    modal.classList.add("show")
+    
     const weatherDiv = document.getElementById("weatherData");
     const tempCel = weatherData.current.temp_c;
     const convert = Math.floor((tempCel * 9/5) + 32)
@@ -40,6 +45,8 @@ function displayWeather(weatherData) {
     skycons.remove("weatherIcon")
     skycons.set("weatherIcon", icon)
     skycons.play()
+
+    
 }
 
 function getSkycon(conditionText) {
@@ -57,3 +64,5 @@ function getSkycon(conditionText) {
 
     return Skycons.PARTLY_CLOUDY_DAY;
 }
+
+
