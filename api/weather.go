@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 type WeatherResponse struct {
@@ -12,16 +13,16 @@ type WeatherResponse struct {
 	Description string  `json:"description"`
 }
 
-// Handler is the exported function Vercel expects
+// Handler exported for Vercel
 func Handler(w http.ResponseWriter, r *http.Request) {
-	// Get the "city" query parameter: /api/weather?city=London
 	city := r.URL.Query().Get("city")
 	if city == "" {
 		http.Error(w, "City query parameter is required", http.StatusBadRequest)
 		return
 	}
 
-	apiKey := "6273b4868f1b471db3d222510240306"
+	// apiKey := os.Getenv("6273b4868f1b471db3d222510240306")
+	apiKey := os.Getenv("WEATHER_API_KEY")
 	url := fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", apiKey, city)
 
 	resp, err := http.Get(url)
@@ -31,7 +32,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	// Decode the API response into a struct
 	var apiResp struct {
 		Location struct {
 			Name string `json:"name"`
@@ -49,7 +49,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Build our simplified response
 	weather := WeatherResponse{
 		City:        apiResp.Location.Name,
 		Temp:        apiResp.Current.TempC,

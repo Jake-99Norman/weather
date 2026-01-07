@@ -2,11 +2,11 @@ const skycons = new Skycons({ color: "black" });
 skycons.play();
 
 async function getWeather(city) {
-    const apiKey = "6273b4868f1b471db3d222510240306";
+    // const apiKey = "6273b4868f1b471db3d222510240306";
 
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+    // const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
 
-    const response = await fetch(url);
+    const response = await fetch(`./api/weather?city=${city}`);
 
     if (!response.ok) {
         throw new Error("Failed to fetch weather data");
@@ -36,22 +36,20 @@ async function showWeather() {
 
 function displayWeather(weatherData) {
     const modal = document.querySelector(".weather-modal");
-
     modal.classList.remove("hide");
     modal.classList.add("show");
 
     const weatherDiv = document.getElementById("weatherData");
-
-    const tempC = weatherData.current.temp_c;
+    const tempC = weatherData.temp;
     const tempF = Math.floor((tempC * 9) / 5 + 32);
 
     weatherDiv.innerHTML = `
-        <h2>Weather in ${weatherData.location.name}</h2>
+        <h2>Weather in ${weatherData.city}</h2>
         <p>Temperature: ${tempF} °F</p>
-        <p>Condition: ${weatherData.current.condition.text}</p>
+        <p>Condition: ${weatherData.description}</p>
     `;
 
-    const icon = getSkycon(weatherData.current.condition.text);
+    const icon = getSkycon(weatherData.description);
     skycons.remove("weatherIcon");
     skycons.set("weatherIcon", icon);
 }
