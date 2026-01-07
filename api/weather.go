@@ -1,4 +1,4 @@
-package handler
+package main
 
 import (
 	"encoding/json"
@@ -13,7 +13,6 @@ type WeatherResponse struct {
 	Description string  `json:"description"`
 }
 
-// Handler exported for Vercel
 func Handler(w http.ResponseWriter, r *http.Request) {
 	city := r.URL.Query().Get("city")
 	if city == "" {
@@ -21,16 +20,24 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// apiKey := os.Getenv("6273b4868f1b471db3d222510240306")
 	apiKey := os.Getenv("WEATHER_API_KEY")
-	url := fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", apiKey, city)
+	if apiKey == "" {
+		http.Error(w, "Weather API key not set", http.StatusInternalServerError)
+		return
+	}
 
+	url := fmt.Sprintf("https://api.weatherapi.com/v1/current.json?key=%s&q=%s&aqi=no", apiKey, city)
 	resp, err := http.Get(url)
 	if err != nil {
-		http.Error(w, "Could not get weather", http.StatusBadRequest)
+		http.Error(w, "Could not get weather", http.StatusBadGateway)
 		return
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		http.Error(w, "Weather API returned an error", http.StatusBadGateway)
+		return
+	}
 
 	var apiResp struct {
 		Location struct {
@@ -49,12 +56,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	weather := WeatherResponse{
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(WeatherResponse{
 		City:        apiResp.Location.Name,
 		Temp:        apiResp.Current.TempC,
 		Description: apiResp.Current.Condition.Text,
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(weather)
+	})
 }
